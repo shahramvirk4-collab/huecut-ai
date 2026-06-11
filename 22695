@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HueCut - Free AI Background Color Changer</title>
+    <script type="module">
+        import { pipeline } from 'https://jsdelivr.net';
+        
+        let processedBlob = null;
+
+        window.removeBG = async function() {
+            const fileInput = document.getElementById('upload');
+            const status = document.getElementById('status');
+            const resultCanvas = document.getElementById('resultCanvas');
+            
+            if (fileInput.files.length === 0) {
+                alert('Please upload an image first!');
+                return;
+            }
+            
+            status.innerText = "AI is processing image... Please wait...";
+            
+            try {
+                processedBlob = await pipeline(fileInput.files);
+                updateBackground();
+                status.innerText = "Background removed! Choose your color below.";
+                document.getElementById('controls').style.display = "block";
+            } catch (error) {
+                status.innerText = "Error processing image.";
+                console.error(error);
+            }
+        }
+
+        window.updateBackground = function() {
+            if (!processedBlob) return;
+            const canvas = document.getElementById('resultCanvas');
+            const ctx = canvas.getContext('2d');
+            const bgColor = document.getElementById('bgColorPicker').value;
+            
+            const img = new Image();
+            img.src = URL.createObjectURL(processedBlob);
+            img.onload = function() {
+                canvas.width = img.width;
+                canvas.height = img.height;
+                canvas.style.display = "block";
+                
+                ctx.fillStyle = bgColor;
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; background-color: #f8fafc; color: #1e293b; }
+        .navbar { background-color: #0f172a; color: white; padding: 15px; font-size: 22px; font-weight: bold; }
+        .container { max-width: 500px; margin: 30px auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        input[type="file"] { margin: 20px 0; width: 100%; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; box-sizing: border-box; }
+        button { background-color: #2563eb; color: white; border: none; font-size: 16px; font-weight: bold; padding: 14px; width: 100%; cursor: pointer; border-radius: 8px; }
+        #controls { display: none; margin-top: 20px; background: #f1f5f9; padding: 15px; border-radius: 8px; }
+        .color-group { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
+        input[type="color"] { border: none; width: 50px; height: 50px; border-radius: 50px; cursor: pointer; }
+        canvas { max-width: 100%; margin-top: 20px; border-radius: 8px; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        #status { font-weight: bold; color: #64748b; margin-top: 15px; }
+    </style>
+</head>
+<body>
+    <div class="navbar">HueCut AI</div>
+    <div class="container">
+        <h2>AI Background Changer</h2>
+        <p>Remove and replace background with any color instantly.</p>
+        <input type="file" id="upload" accept="image/*">
+        <button onclick="removeBG()">Process Image</button>
+        <p id="status"></p>
+        
+        <div id="controls">
+            <div class="color-group">
+                <label>Select Background Color:</label>
+                <input type="color" id="bgColorPicker" value="#ffffff" onchange="updateBackground()">
+            </div>
+        </div>
+        
+        <canvas id="resultCanvas"></canvas>
+    </div>
+</body>
+</html>
