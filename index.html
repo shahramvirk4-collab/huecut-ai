@@ -3,84 +3,143 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HueCut - Free AI Background Color Changer</title>
-    <script type="module">
-        import { pipeline } from 'https://jsdelivr.net';
-        
-        let processedBlob = null;
+    <!-- US Market Targeted SEO Meta Tags -->
+    <title>HueCut AI - Free AI Background Remover & Color Changer Online</title>
+    <meta name="description" content="Instantly remove image background online for free. Replace with custom solid colors, premium backgrounds, or upload your own image. Transparent PNG exporter.">
+    <meta name="keywords" content="free ai background remover, change photo background color online, transparent bg maker, remove bg free, product photography background editor">
+    
+    <!-- Google Fonts for Premium US SaaS Look -->
+    <link href="https://googleapis.com" rel="stylesheet">
+    
+    <!-- Powerful Client-Side AI Engine -->
+    <script src="https://jsdelivr.net"></script>
 
-        window.removeBG = async function() {
-            const fileInput = document.getElementById('upload');
-            const status = document.getElementById('status');
-            const resultCanvas = document.getElementById('resultCanvas');
-            
-            if (fileInput.files.length === 0) {
-                alert('Please upload an image first!');
-                return;
-            }
-            
-            status.innerText = "AI is processing image... Please wait...";
-            
-            try {
-                processedBlob = await pipeline(fileInput.files);
-                updateBackground();
-                status.innerText = "Background removed! Choose your color below.";
-                document.getElementById('controls').style.display = "block";
-            } catch (error) {
-                status.innerText = "Error processing image.";
-                console.error(error);
-            }
-        }
-
-        window.updateBackground = function() {
-            if (!processedBlob) return;
-            const canvas = document.getElementById('resultCanvas');
-            const ctx = canvas.getContext('2d');
-            const bgColor = document.getElementById('bgColorPicker').value;
-            
-            const img = new Image();
-            img.src = URL.createObjectURL(processedBlob);
-            img.onload = function() {
-                canvas.width = img.width;
-                canvas.height = img.height;
-                canvas.style.display = "block";
-                
-                ctx.fillStyle = bgColor;
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(img, 0, 0);
-            }
-        }
-    </script>
     <style>
-        body { font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; background-color: #f8fafc; color: #1e293b; }
-        .navbar { background-color: #0f172a; color: white; padding: 15px; font-size: 22px; font-weight: bold; }
-        .container { max-width: 500px; margin: 30px auto; background: white; padding: 25px; border-radius: 16px; box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
-        input[type="file"] { margin: 20px 0; width: 100%; border: 2px dashed #cbd5e1; padding: 15px; border-radius: 8px; box-sizing: border-box; }
-        button { background-color: #2563eb; color: white; border: none; font-size: 16px; font-weight: bold; padding: 14px; width: 100%; cursor: pointer; border-radius: 8px; }
-        #controls { display: none; margin-top: 20px; background: #f1f5f9; padding: 15px; border-radius: 8px; }
-        .color-group { display: flex; align-items: center; justify-content: center; gap: 10px; font-weight: bold; }
-        input[type="color"] { border: none; width: 50px; height: 50px; border-radius: 50px; cursor: pointer; }
-        canvas { max-width: 100%; margin-top: 20px; border-radius: 8px; display: none; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        #status { font-weight: bold; color: #64748b; margin-top: 15px; }
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --bg-main: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: #334155;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+        
+        body { background-color: var(--bg-main); color: var(--text-light); min-height: 100vh; display: flex; flex-direction: column; }
+        
+        /* Attractive Header */
+        .navbar { background: rgba(15, 23, 42, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border-color); padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; z-index: 100; }
+        .logo { font-size: 24px; font-weight: 800; background: linear-gradient(to right, #3b82f6, #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge { background: rgba(59, 130, 246, 0.2); color: #60a5fa; font-size: 12px; padding: 4px 10px; border-radius: 20px; font-weight: 700; border: 1px solid rgba(59, 130, 246, 0.3); }
+
+        /* Hero / Main Layout */
+        .main-container { max-width: 1200px; width: 90%; margin: 40px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: start; flex-grow: 1; }
+        
+        @media (max-width: 900px) {
+            .main-container { grid-template-columns: 1fr; }
+        }
+
+        .workspace-card { background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 24px; padding: 30px; box-shadow: 0 20px 40px -15px rgba(0,0,0,0.5); }
+        
+        h1 { font-size: 32px; font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .subtitle { color: var(--text-muted); font-size: 15px; margin-bottom: 25px; }
+
+        /* Premium Upload Box */
+        .upload-zone { border: 2px dashed #475569; padding: 40px 20px; border-radius: 16px; cursor: pointer; text-align: center; transition: all 0.3s ease; background: rgba(30, 41, 59, 0.5); }
+        .upload-zone:hover { border-color: var(--primary); background: rgba(59, 130, 246, 0.05); }
+        .upload-zone input { display: none; }
+        .upload-icon { font-size: 40px; margin-bottom: 10px; display: block; }
+        .filename-display { margin-top: 10px; font-size: 14px; color: #60a5fa; font-weight: 600; word-break: break-all; }
+
+        /* UI Buttons */
+        .btn { display: inline-flex; align-items: center; justify-content: center; width: 100%; padding: 15px; margin-top: 20px; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: all 0.2s ease; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); box-shadow: 0 0 20px rgba(37, 99, 235, 0.4); }
+        .btn:disabled { background: #475569; color: var(--text-muted); cursor: not-allowed; box-shadow: none; }
+        
+        .btn-success { background: #10b981; color: white; margin-top: 15px; }
+        .btn-success:hover { background: #059669; box-shadow: 0 0 20px rgba(16, 185, 129, 0.4); }
+
+        #status { font-weight: 600; font-size: 14px; text-align: center; margin-top: 15px; color: #60a5fa; line-height: 1.4; }
+
+        /* Interactive Editing Toolkit Controls */
+        .editor-section { display: none; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .control-group { margin-top: 25px; border-top: 1px solid var(--border-color); padding-top: 20px; }
+        .control-label { font-size: 15px; font-weight: 700; margin-bottom: 12px; display: block; color: #e2e8f0; }
+
+        /* Advanced Color Picker Layout */
+        .color-palette { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+        .color-swatch { width: 36px; height: 36px; border-radius: 50%; cursor: pointer; border: 2px solid transparent; transition: transform 0.2s; }
+        .color-swatch:hover { transform: scale(1.1); }
+        .custom-color-input { width: 36px; height: 36px; border: none; border-radius: 50%; cursor: pointer; overflow: hidden; background: none; }
+
+        /* Premium Preset Visual Background Gallery */
+        .bg-gallery { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+        .bg-thumb { width: 100%; aspect-ratio: 16/10; border-radius: 8px; cursor: pointer; object-fit: cover; border: 2px solid transparent; transition: all 0.2s; }
+        .bg-thumb:hover { transform: scale(1.05); border-color: var(--primary); }
+        
+        .custom-bg-btn { background: #334155; border: 1px dashed #64748b; color: white; border-radius: 8px; font-size: 12px; font-weight: 600; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; height: 100%; min-height: 48px; }
+
+        /* Output Canvas Area */
+        .preview-pane { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #0b0f19; border: 1px dashed var(--border-color); border-radius: 24px; padding: 20px; min-height: 400px; position: relative; }
+        .preview-placeholder { color: var(--text-muted); font-size: 14px; text-align: center; }
+        canvas { max-width: 100%; max-height: 550px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); display: none; background-image: linear-gradient(45deg, #1e293b 25%, transparent 25%), linear-gradient(-45deg, #1e293b 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #1e293b 75%), linear-gradient(-45deg, transparent 75%, #1e293b 75%); background-size: 20px 20px; background-position: 0 0, 0 10px, 10px -10px, -10px 0px; }
+
+        /* US Footer SEO Text */
+        footer { margin-top: auto; padding: 30px; text-align: center; font-size: 13px; color: var(--text-muted); border-top: 1px solid var(--border-color); }
     </style>
 </head>
 <body>
-    <div class="navbar">HueCut AI</div>
-    <div class="container">
-        <h2>AI Background Changer</h2>
-        <p>Remove and replace background with any color instantly.</p>
-        <input type="file" id="upload" accept="image/*">
-        <button onclick="removeBG()">Process Image</button>
-        <p id="status"></p>
+
+    <header class="navbar">
+        <div class="logo">HueCut AI</div>
+        <div class="badge">PRO v2.0 - Free Studio</div>
+    </header>
+
+    <main class="main-container">
         
-        <div id="controls">
-            <div class="color-group">
-                <label>Select Background Color:</label>
-                <input type="color" id="bgColorPicker" value="#ffffff" onchange="updateBackground()">
-            </div>
-        </div>
-        
-        <canvas id="resultCanvas"></canvas>
-    </div>
-</body>
-</html>
+        <!-- Controls Card Left -->
+        <section class="workspace-card">
+            <h1>AI Background Remover</h1>
+            <p class="subtitle">Perfect for eCommerce, US professionals, and content creators.</p>
+            
+            <label class="upload-zone" id="dropzone">
+                <span class="upload-icon">📸</span>
+                <strong>Click to Upload Image</strong>
+                <p style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Supports PNG, JPG, WEBP</p>
+                <input type="file" id="upload" accept="image/*" onchange="handleFileSelect()">
+                <div id="filename" class="filename-display"></div>
+            </label>
+
+            <button class="btn btn-primary" id="processBtn" onclick="processAIImage()">Process Image with AI</button>
+            <p id="status"></p>
+
+            <!-- Expanded Editing Toolkit Options Panel -->
+            <div class="editor-section" id="editorSection">
+                
+                <!-- Color Suite -->
+                <div class="control-group">
+                    <label class="control-label">⚡ Change Solid Color</label>
+                    <div class="color-palette">
+                        <!-- Custom Color Picker Asset wheel -->
+                        <input type="color" id="bgColorPicker" class="custom-color-input" value="#ffffff" onchange="selectBgType('color')">
+                        <!-- Preset Colors popular in US Stores -->
+                        <div class="color-swatch" style="background: #ffffff; border: 1px solid #cbd5e1" onclick="applyPresetColor('#ffffff')"></div>
+                        <div class="color-swatch" style="background: #000000;" onclick="applyPresetColor('#000000')"></div>
+                        <div class="color-swatch" style="background: #f1f5f9;" onclick="applyPresetColor('#f1f5f9')"></div>
+                        <div class="color-swatch" style="background: #ff3b30;" onclick="applyPresetColor('#ff3b30')"></div>
+                        <div class="color-swatch" style="background: #34c759;" onclick="applyPresetColor('#34c759')"></div>
+                        <div class="color-swatch" style="background: #007aff;" onclick="applyPresetColor('#007aff')"></div>
+                        <div class="color-swatch" style="background: #ffcc00;" onclick="applyPresetColor('#ffcc00')"></div>
+                    </div>
+                </div>
+
+                <!-- Backdrop Image Gallery Suite -->
+                <div class="control-group">
+                    <label class="control-label">🌆 Premium Backdrop Gallery</label>
+                    <div class="bg-gallery">
+                        <!-- Studio Light Background -->
